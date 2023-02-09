@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  unleashexample:
+  unleash-example:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
