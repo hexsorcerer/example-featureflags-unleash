@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  unleash-example:
+    image: ${DOCKER_REGISTRY-}unleash-example
+    build:
+      context: .
+      dockerfile: Services/UnleashExample/UnleashExample.API/Dockerfile
