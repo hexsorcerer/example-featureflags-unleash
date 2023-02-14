@@ -10,7 +10,7 @@ services:
     expose:
       - "4242"
     environment:
-      DATABASE_URL: "postgres://postgres:unleash@postgresdata/db"
+      DATABASE_URL: "postgres://postgres:unleash@postgresdata/unleash"
       DATABASE_SSL: "false"
       LOG_LEVEL: "warn"
       INIT_FRONTEND_API_TOKENS: "default:development.unleash-insecure-frontend-api-token"
@@ -18,7 +18,7 @@ services:
 
   postgresdata:
     environment:
-      POSTGRES_DB: "db"
+      POSTGRES_DB: "unleash"
       POSTGRES_HOST_AUTH_METHOD: "trust"
     expose:
       - "5432"
