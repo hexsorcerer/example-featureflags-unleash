@@ -1,8 +1,12 @@
 version: '3.4'
 
 services:
+
   unleash-example:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - UNLEASH_API_TOKEN=${UNLEASH_API_TOKEN}
     ports:
+      - "8000:80"
+    expose:
       - "80"
