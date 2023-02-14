@@ -5,36 +5,16 @@ networks:
 
 services:
 
-  # The Unleash server contains the Unleash configuration and
-  # communicates with server-side SDKs and the Unleash Proxy
   unleash-server:
     image: unleashorg/unleash-server:latest
     container_name: unleash-server
-    ports:
-      - "4242:4242"
-    expose:
-      - "4242"
-    environment:
-      # This points Unleash to its backing database (defined in the `db` section below)
-      DATABASE_URL: "postgres://postgres:unleash@db/postgres"
-      # Disable SSL for database connections. @chriswk: why do we do this?
-      DATABASE_SSL: "false"
-      # Changing log levels:
-      LOG_LEVEL: "warn"
-      # Proxy clients must use one of these keys to connect to the
-      # Proxy. To add more keys, separate them with a comma (`key1,key2`).
-      INIT_FRONTEND_API_TOKENS: "default:development.unleash-insecure-frontend-api-token"
-      # Initialize Unleash with a default set of client API tokens. To
-      # initialize Unleash with multiple tokens, separate them with a
-      # comma (`token1,token2`).
-      INIT_CLIENT_API_TOKENS: "default:development.unleash-insecure-api-token"
     depends_on:
-      - db
-    volumes:
-      - ../scripts:/scripts
+      postgresdata:
+        condition:
+          service_healthy
     networks:
       unleash:
-    command: ["/scripts/wait-for", "db:5432", "--", "node", "index.js"]
+    command: ["/scripts/wait-for", "postgresdata:5432", "--", "node", "index.js"]
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:4242/health || exit 1
       interval: 1s
@@ -42,16 +22,9 @@ services:
       retries: 5
       start_period: 15s
 
-  db:
-    expose:
-      - "5432"
+  postgresdata:
     image: postgres:latest
-    container_name: postgres
-    environment:
-      # create a database called `db`
-      POSTGRES_DB: "db"
-      # trust incoming connections blindly (DON'T DO THIS IN PRODUCTION!)
-      POSTGRES_HOST_AUTH_METHOD: "trust"
+    container_name: postgresdata
     networks:
       unleash:
     healthcheck:
@@ -61,7 +34,7 @@ services:
       retries: 5
       start_period: 10s
 
-  unleash-example:
+  unleash-example-api:
     image: ${DOCKER_REGISTRY-}unleash-example-api
     container_name: unleash-example-api
     networks:
