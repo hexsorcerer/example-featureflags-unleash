@@ -22,13 +22,21 @@ services:
     command: |
       "
       # create example feature toggle
-      curl -i -X POST http://unleash-server:4242/api/admin/projects/default/features -H 'Authorization: ${INIT_ADMIN_API_TOKENS}' -H 'Content-Type: application/json' --data-raw '{ \"name\": \"ExampleFeature\" }'
+      curl -i -X POST http://unleash-server:4242/api/admin/projects/default/features \\
+        -H 'Authorization: ${INIT_ADMIN_API_TOKENS}' \\
+        -H 'Content-Type: application/json' \\
+        --data-raw '{ \"name\": \"ExampleFeature\" }'
 
       # create standard rollout strategy
-      curl -i -X POST http://unleash-server:4242/api/admin/projects/default/features/ExampleFeature/environments/development/strategies -H 'Authorization: ${INIT_ADMIN_API_TOKENS}' -H 'Content-Type: application/json' --data-raw '{ \"name\": \"default\", \"constraints\": [], \"parameters\": {} }'
+      curl -i -X POST http://unleash-server:4242/api/admin/projects/default/features/ExampleFeature/environments/development/strategies \\
+        -H 'Authorization: ${INIT_ADMIN_API_TOKENS}' \\
+        -H 'Content-Type: application/json' \\
+        --data-raw '{ \"name\": \"default\", \"constraints\": [], \"parameters\": {} }'
 
       # enable example feature toggle
-      curl -i -X POST http://unleash-server:4242/api/admin/projects/default/features/ExampleFeature/environments/development/on -H 'Authorization: ${INIT_ADMIN_API_TOKENS}' -H 'Content-Type: application/json'
+      curl -i -X POST http://unleash-server:4242/api/admin/projects/default/features/ExampleFeature/environments/development/on \\
+        -H 'Authorization: ${INIT_ADMIN_API_TOKENS}' \\
+        -H 'Content-Type: application/json'
       "
 
   postgresdata:
