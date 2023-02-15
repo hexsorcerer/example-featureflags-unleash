@@ -10,8 +10,7 @@ services:
     container_name: unleash-server
     depends_on:
       postgresdata:
-        condition:
-          service_healthy
+        condition: service_healthy
     networks:
       unleash:
     command: ["/scripts/wait-for", "postgresdata:5432", "--", "node", "index.js"]
@@ -21,6 +20,15 @@ services:
       timeout: 1m
       retries: 5
       start_period: 15s
+
+  unleash-init:
+    image: curlimages/curl:latest
+    container_name: unleash-init
+    depends_on:
+      unleash-server:
+        condition: service_healthy
+    networks:
+      unleash:
 
   postgresdata:
     image: postgres:latest
@@ -41,8 +49,7 @@ services:
       unleash:
     depends_on:
       unleash-server:
-        condition:
-          service_healthy
+        condition: service_healthy
     build:
       context: .
       dockerfile: Services/UnleashExample/UnleashExample.API/Dockerfile
